@@ -1,0 +1,142 @@
+{% extends 'adminlte/base.html' %}
+
+{% block content %}
+
+    {% load crispy_forms_tags %}
+    <script type="text/javascript">
+        $(function () {
+
+            /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
+            $("#id_foto").change(function () {
+                if (this.files && this.files[0]) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#image").attr("src", e.target.result);
+                        $("#modalCrop").modal("show");
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            /* SCRIPTS TO HANDLE THE CROPPER BOX */
+            var $image = $("#image");
+            var cropBoxData;
+            var canvasData;
+            $("#modalCrop").on("shown.bs.modal", function () {
+                $image.cropper({
+                    viewMode: 1,
+                    aspectRatio: 1 / 1,
+                    minCropBoxWidth: 354,
+                    minCropBoxHeight: 472,
+                    ready: function () {
+                        $image.cropper("setCanvasData", canvasData);
+                        $image.cropper("setCropBoxData", cropBoxData);
+                    }
+                });
+            }).on("hidden.bs.modal", function () {
+                cropBoxData = $image.cropper("getCropBoxData");
+                canvasData = $image.cropper("getCanvasData");
+                $image.cropper("destroy");
+            });
+
+            $(".js-zoom-in").click(function () {
+                $image.cropper("zoom", 0.1);
+            });
+
+            $(".js-zoom-out").click(function () {
+                $image.cropper("zoom", -0.1);
+            });
+
+            $(".js-crop-reset").click(function () {
+                $image.cropper("reset");
+            });
+
+            /* SCRIPT TO COLLECT THE DATA AND POST TO THE SERVER */
+            $(".js-crop-and-upload").click(function () {
+                var cropData = $image.cropper("getData");
+                $("#id_x").val(cropData["x"]);
+                $("#id_y").val(cropData["y"]);
+                $("#id_height").val(cropData["height"]);
+                $("#id_width").val(cropData["width"]);
+                $("#formUpload").submit();
+            });
+        });
+    </script>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Фото сотрудника</h3>
+                </div>
+                <div class="box-body">
+                    <form novalidate action="{% url 'update_account' kwargs.factory %}" role="form" method="post"
+                          enctype='multipart/form-data' id="formUpload">
+                        {% csrf_token %}
+                        {{ form.id }}
+                        {{ form.x }}
+                        {{ form.y }}
+                        {{ form.width }}
+                        {{ form.height }}
+                        <div class="form-group">
+                            {{ form.foto|as_crispy_field }}
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                            <a href="{% url 'detail_account_profile' account_data.id %}" type="button" class="btn btn-default">Отмена</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalCrop">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Crop the photo</h4>
+                    </div>
+                    <div class="modal-body" style="padding: 0">
+                        <img src="" id="image" style="max-width: 100%;">
+                    </div>
+                    <div class="modal-footer">
+                        <div class="btn-group pull-left" role="group">
+                            <button type="button" class="btn btn-default js-zoom-in">
+                                <span class="glyphicon glyphicon-zoom-in"></span>
+                            </button>
+                            <button type="button" class="btn btn-default js-zoom-out">
+                                <span class="glyphicon glyphicon-zoom-out"></span>
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Закрыть
+                        </button>
+                        <button type="button" class="btn btn-primary js-crop-and-upload">
+                            Обрезать и згрузить
+                        </button>
+                        <button type="button" class="btn btn-primary js-crop-reset" data-method="reset" title="Reset">
+                                Центрировать
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Обработанное фото</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-4 col-md-3" id="ggggggg">
+                            <img src="{{ MEDIA_URL }}{{ account_data.foto }}" class="thumbnail">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

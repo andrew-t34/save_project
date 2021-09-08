@@ -1,0 +1,37 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('',
+         views.MainCompany.as_view(),
+         name='company'),
+    path('update/<slug:factory>',
+         views.CreateUpdateController.as_view(),
+         name='update'),
+    path('update/<slug:factory>/<int:pk>',
+         views.CreateUpdateController.as_view(),
+         name='update'),
+    path('delete/<slug:factory>/<int:pk>',
+         views.DeleteController.as_view(),
+         name='delete'),
+    path('customers/',
+         views.MyCustomersCompany.as_view(),
+         name='customers'),
+    path('divisions/',
+         views.Division.as_view(),
+         name='divisions'),
+    path('divisions/<int:pk>',
+         views.Division.as_view(),
+         name='divisions_detail'),
+    path('divisions/<slug:factory>/<int:pk>',
+         views.CreateUpdateController.as_view(),
+         name='position_update'),
+    path('divisions/<int:division_id>/<slug:factory>',
+         views.CreateUpdateController.as_view(),
+         name='position_update'),
+    path('divisions/<int:division_id>/<slug:factory>/<int:pk>',
+         views.CreateUpdateController.as_view(),
+         name='position_update'),
+    # path('logo/<int:pk>', views.LogoCompany.as_view(), name='logo'),
+    # path('logo', views.LogoCompany.as_view(), name='logo_post')
+]

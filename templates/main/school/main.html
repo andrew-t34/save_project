@@ -1,0 +1,24 @@
+{% extends 'adminlte/base.html' %}
+
+{% block content %}
+  Это главная страница <br>
+  {{ text }} <br>
+  {{ daddy }}
+   {{ rec }}
+  <table class="table table-bordered">
+      <thead>
+        <th><a href="">Перейти к теме</a></th>
+        <th>Колонка 2</th>
+        <th>Колонка 3</th>
+        <th>Колонка 4</th>
+      </thead>
+      <<tbody>
+        <tr>
+          <td>Строка 1 Столбец 1</td>
+          <td>Строка 1 Столбец 2</td>
+          <td>Строка 1 Столбец 3</td>
+          <td>Строка 1 Столбец 4</td>
+        </tr>
+      </tbody>
+  </table>
+{% endblock %}

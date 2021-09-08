@@ -1,0 +1,206 @@
+{% extends 'adminlte/base.html' %}
+
+
+{% block content %}
+
+    {% if divisions %}
+        <div class="row">
+            <div class="col-md-5">
+                <a href="{% url 'update' 'division' %}" type="button" class="btn btn-block btn-success btn-xs">Создать
+                    подразделение</a>
+                {% if empty_positions %}
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Должности не привязаны к подразделению</h3>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-hover">
+                                <thead>
+                                <th>Изм.</th>
+                                <th>Наименование должности</th>
+                                <th>Шт.ед</th>
+                                </thead>
+                                {% for empty_position in empty_positions %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'position_update' 'position' empty_position.id %}">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {{ empty_position.name }}
+                                        </td>
+                                        <td>
+                                        {{ empty_position.quantity }}
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                {% endif %}
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Подразделения компании</h3>
+                    </div>
+                    <div class="box-body">
+                        {% load mptt_tags %}
+                        <ul id="tree">
+                            {% recursetree divisions %}
+                                <li>
+                                    <span>{{ node.name }}
+                                    <a href="{% url 'update' 'division' node.id %}">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    </span>
+                                    {% if not node.is_leaf_node %}
+                                        <ul>
+                                            {{ children }}
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                            {% endrecursetree %}
+                        </ul>
+                    </div>
+
+                    <!-- /.box-body -->
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Штатное расписание</h3>
+                    </div>
+                    <div class="box-body">
+                        {% load mptt_tags %}
+                        <ul class="nav nav-stacked">
+                            {% recursetree divisions %}
+                                <li>
+                                    <a href="{% url 'position_update' node.id 'position' %}">
+                                        <i {% if node.level == 0 %} class="text-red" {% else %}
+                                                                    class="text-red"  {% endif %}>{{ node.name }}</i>
+                                        <i class="fa fa-user-plus pull-right success"></i>
+                                    </a>
+                                    {% for key, value in positions.items %}
+                                        {#                                    <ul>#}
+                                        {% if key ==  node.id %}
+                                            <table class="table table-hover">
+                                            <thead>
+                                            <th>Изм.</th>
+                                            <th>Подразделение</th>
+                                            <th>Наименование должности</th>
+                                            <th>Шт.ед</th>
+                                            </thead>
+                                            {% for position in value %}
+                                                <tr>
+                                                    <td>
+                                                        <a href="{% url 'position_update' node.id 'position' position.id %}">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        {{ node.name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ position.name }}</td>
+                                                    <td width="15px">
+                                                        {{ position.quantity }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </table>
+                                        {#                                    </ul>#}
+                                    {% endfor %}
+                                    {% if  node.id not in positions %}
+                                        <ul>
+                                            <li>
+                                                <a href="{% url 'position_update' node.id 'position' %}">
+                                                    Пустой отдел
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    {% endif %}
+                                    {% if not node.is_leaf_node %}
+                                        <ul class="nav nav-stacked">
+                                            {{ children }}</ul>
+                                    {% endif %}
+
+                                </li>
+                            {% endrecursetree %}
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <a href="{% url 'update' 'division' %}" type="button" class="btn btn-block btn-success btn-xs">Создать
+                подразделение</a>
+        </div>
+    {% endif %}
+
+    <script type="text/javascript">
+
+
+        $.fn.extend({
+            treed: function (o) {
+
+                var openedClass = 'fa fa-minus';
+                var closedClass = 'fa fa-plus';
+
+                if (typeof o != 'undefined') {
+                    if (typeof o.openedClass != 'undefined') {
+                        openedClass = o.openedClass;
+                    }
+                    if (typeof o.closedClass != 'undefined') {
+                        closedClass = o.closedClass;
+                    }
+                }
+                ;
+//initialize each of the top levels
+                var tree = $(this);
+                tree.addClass("tree");
+                tree.find('li').has("ul").each(function () {
+                    var branch = $(this); //li with children ul
+                    branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
+                    branch.addClass('branch');
+                    branch.on('click', function (e) {
+                        if (this == e.target) {
+                            var icon = $(this).children('i:first');
+                            icon.toggleClass(openedClass + " " + closedClass);
+                            $(this).children().children().toggle();
+                        }
+                    })
+                    branch.children().children().toggle();
+                });
+//fire event from the dynamically added icon
+                tree.find('.branch .indicator').each(function () {
+                    $(this).on('click', function () {
+                        $(this).closest('li').click();
+                    });
+                });
+//fire event to open branch if the li contains an anchor instead of text
+                tree.find('.branch>a').each(function () {
+                    $(this).on('click', function (e) {
+                        $(this).closest('li').click();
+                        e.preventDefault();
+                    });
+                });
+//fire event to open branch if the li contains a button instead of text
+                tree.find('.branch>button').each(function () {
+                    $(this).on('click', function (e) {
+                        $(this).closest('li').click();
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
+        $('#tree').treed();
+    </script>
+{% endblock %}
+

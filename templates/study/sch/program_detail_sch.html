@@ -1,0 +1,74 @@
+{% extends 'adminlte/base.html' %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <i class="fa fa-text-width"></i>
+                    <h3 class="box-title">Программа</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" height="200">
+                    Здесь вывводим полное название программы.
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <i class="fa fa-text-width"></i>
+                    <h3 class="box-title">Оглавление</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" height="200">
+                    <table class="table table-hover">
+                        {% for module in modules %}
+                            <tr>
+                                <td>
+                                    {{ module.number }}.
+                                </td>
+                                <td>
+                                    {{ module.name }}
+                                </td>
+                                {% for topic in topics %}
+                                    {% if topic.module_id == module.id %}
+                                        <tr>
+
+                                            <td>{{ module.number }}.{{ topic.topic_number }}</td>
+                                            <td>
+{#                                                <a href="{% url 'update_module' program_id 'topic' topic.id %} ">#}
+                                                    {{ topic.title }}
+{#                                                </a>#}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <i class="fa fa-text-width"></i>
+                    <h3 class="box-title">{{ topic.title }}</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    {{ topic.text|safe }}
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'adminlte/base.html' %}
+{#{% load breadcrumbs %}#}
+
+{#{% block breadcrumbs %}#}
+{##}
+{#   {% breadcrumb 'New Employee' %}#}
+{#{% endblock %}#}
+
+
+
+{% block content %}
+
+    {% load crispy_forms_tags %}
+
+    <!-- general form elements -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Новый договор</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form novalidate action="{% url 'create_update_contract' 'contract' %}" role="form" method="post">
+            {{ form.id }}
+            {% csrf_token %}
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        {% if not form.id.value %}
+                            <div class="form-group {% if form.propety_id.errors %} has-error {% endif %}">
+                                {{ form.propety_id|as_crispy_field }}
+                            </div>
+                            <div class="form-group {% if form.client.errors %} has-error {% endif %}">
+                                {{ form.name|as_crispy_field }}
+                            </div>
+                            <div class="form-group {% if form.inn.errors %} has-error {% endif %}">
+                                {{ form.inn|as_crispy_field }}
+                            </div>
+                        {% endif %}
+                        <div class="form-group {% if form.date.errors %} has-error {% endif %}">
+                            {{ form.date|as_crispy_field }}
+                        </div>
+                        <div class="form-group {% if form.number.errors %} has-error {% endif %}">
+                            {{ form.number|as_crispy_field }}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <a href="{% url 'contract_main' %}" type="button" class="btn btn-danger">Отмена</a>
+            </div>
+        </form>
+    </div>
+    <!-- /.box -->
+    {{ form.media }}
+{% endblock %}

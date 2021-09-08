@@ -1,0 +1,15 @@
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon/favicon.ico' %}"/>
+    {#<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css">#}
+    <!-- Ionicons -->
+    <link rel="stylesheet" type="text/css" href="{% static "admin-lte/dist/css/AdminLTE.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "admin-lte/dist/css/skins/_all-skins.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "icheck/skins/square/blue.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/cropper/css/cropper.min.css' %}" >
+    <link rel="stylesheet" type="text/css" href="{% static "conflicts/conflicts.css" %}">
+{% endblock %}

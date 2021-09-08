@@ -1,0 +1,43 @@
+{% extends 'adminlte/base.html' %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="pad margin no-print">
+            <a href="{% url 'cu_study' kwargs.factory %}" class="btn btn-block btn-warning btn-lg">Добавить программу</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Программы обучения</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <table class="table table-condensed">
+                        <tbody>
+                        {% for unit in units %}
+                            <tr>
+                                <td style="width: 10px">{{ forloop.counter }}.</td>
+                                <td>{{ unit.field }}</td>
+                                <td>{{ unit.name }}</td>
+                                <td>{{ unit.fullname }}</td>
+                                <td style="width: 40px"><a href="{% url 'program_detail' unit.id %}"
+                                                           class="badge bg-orange"><i
+                                        class="fa fa-search"></i></a></td>
+                                <td style="width: 40px"><a href="{% url 'cu_study' kwargs.factory unit.id %}"
+                                                           class="badge bg-green"><i class="fa fa-pencil"></i></a></td>
+                                <td style="width: 40px"><a href="{% url 'cu_study' kwargs.factory unit.id 'del' %}"
+                                                           class="badge bg-red" id="delete"><i
+                                        class="fa fa-trash"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

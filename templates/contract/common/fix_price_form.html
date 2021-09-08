@@ -1,0 +1,42 @@
+{% extends 'adminlte/base.html' %}
+{% load contract_extras %}
+
+{% block content %}
+    {% load crispy_forms_tags %}
+
+    <!-- general form elements -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Стандартные цены обучения</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form novalidate action="{% url 'create_update_contract' 'fix_price' %}" role="form" method="post">
+            {% csrf_token %}
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                    {% get_program_dict as program_dict %}
+                    {{ form.management_form }}
+                     {% for formset in form %}
+                           {% program_name formset.program_id.value program_dict as name %}
+                            {{ formset.program_id|as_crispy_field }}
+                            {{ name }}
+                        <div class="form-group {% if formset.price.errors %} has-error {% endif %}">
+                            {{ formset.price|as_crispy_field }}
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <a href="{% url 'contract_main' %}" type="button" class="btn btn-danger">Отмена</a>
+            </div>
+        </form>
+    </div>
+    <!-- /.box -->
+{% endblock %}
+

@@ -1,0 +1,106 @@
+{% extends 'adminlte/base.html' %}
+
+
+{% block content %}
+    {% load crispy_forms_tags %}
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Создать ответы на вопрос</h3>
+             <a href="{% url 'program_questions' kwargs.program_id %}" class="btn btn-default btn-xs pull-right">Назад</a>
+        </div>
+        <form role="form" novalidate
+              action="{% url 'cr_up_answer' kwargs.program_id kwargs.module_id kwargs.question_id kwargs.form_name %}"
+              method="post">
+            {% csrf_token %}
+            {{ form.id|as_crispy_field }}
+            {{ form.question_id|as_crispy_field }}
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            {{ form.number|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.text|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                {{ form.status|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        {% if answers %}
+                            <table class="table table-hover">
+                                {% for answer in answers %}
+                                    <tr>
+                                    <td>{{ answer.number }}</td>
+                                    <td>{{ answer.text }}</td>
+                                    <td width="100px">
+                                        {% if answer.status %}
+                                            Верный
+                                        {% else %}
+                                            Не верный
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a class="text-light-blue" href="{% url 'cr_up_answer' kwargs.program_id kwargs.module_id kwargs.question_id kwargs.form_name answer.id %}">
+                                            <i class="fa fa-pencil info"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="text-red" href="{% url 'delete' kwargs.program_id kwargs.module_id kwargs.question_id kwargs.form_name answer.id %}">
+                                        <i class="fa fa-times-circle-o"></i>
+                                        </a>
+                                    </td>
+                                    </tr>
+
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            <blockquote>
+                                <p>Ответов для данного вопроса еще не создано.</p>
+                                <small>Попробуйте создать <cite title="Source Title">Один</cite></small>
+                            </blockquote>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                {% if kwargs.pk %}
+                    <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
+                            data-target="#modal-danger">
+                        Удалить
+                    </button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    <div class="modal modal-danger fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Удалить вопрос тестирования</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Вы действительно хотите удалить этот вопрос?</p>
+                    <p>Востановить данные будет не возможно!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">НЕТ</button>
+                    <a href="{% url 'cr_up_answer' kwargs.program_id kwargs.module_id kwargs.question_id kwargs.form_name %}"
+                       class="btn btn-outline">ДА</a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+{% endblock %}

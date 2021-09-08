@@ -1,0 +1,19 @@
+{% load static %}
+
+{% block scripts %}
+    {#<script src="{% static "/jquery/dist/jquery.min.js" %}"></script>#}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static "/jquery/dist/jquery-ui.min.js" %}"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+
+    <script src="{% static "/bootstrap/dist/js/bootstrap.min.js" %} "></script>
+    <script src="{% static "/admin-lte/dist/js/app.min.js" %}"></script>
+    <script src="{% static "/inputmask/jquery.inputmask.js" %}"></script>
+    {#    <script src="{% static '/cropper/js/cropper.min.js' %}"></script>#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.0.0/cropper.min.js"></script>
+{% endblock %}

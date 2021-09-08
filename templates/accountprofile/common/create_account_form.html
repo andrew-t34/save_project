@@ -1,0 +1,71 @@
+{% extends 'adminlte/base.html' %}
+
+
+{% block content %}
+    {% load crispy_forms_tags %}
+    <!-- general form elements -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Новый сотрудник</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form novalidate action="{% url 'update_account' kwargs.factory %}" role="form" method="post"
+              enctype='multipart/form-data'>
+            {{ form.id }}
+            {% csrf_token %}
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.second|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.name|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.middle|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.birthday|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.snils|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.education|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group {% if form.date_recruitment.errors %} has-error {% endif %}">
+                            {{ form.date_event|as_crispy_field }}
+                        </div>
+                        <div class="form-group {% if form.division_id.errors %} has-error {% endif %}">
+                            {{ form.division_id|as_crispy_field }}
+                        </div>
+                        <div class="form-group {% if form.position.errors %} has-error {% endif %}">
+                            {{ form.position_id|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <a href="{% url 'list_account_profile' %}" type="button" class="btn btn-default">Отмена</a>
+            </div>
+            {{ form.media }}
+        </form>
+
+    </div>
+    <!-- /.box -->
+    <script>
+        $(document).ready(function () {
+            $("#snils").inputmask("999-999-999 99");
+        });
+
+
+    </script>
+{% endblock %}

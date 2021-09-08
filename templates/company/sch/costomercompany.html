@@ -1,0 +1,14 @@
+{% extends 'adminlte/base.html' %}
+
+{% block content %}
+    {#<small class="label pull-right bg-green">new</small>#}
+    {#<div class="box">#}
+    <!-- {{ request.session.company }} -->
+    {{ data }}
+    {% if company %}
+        <p>выводим список компаний</p>>
+    {% else %}
+        <a href="{% url 'cr_up_customer' %}" type="button" class="btn btn-block btn-success btn-lg">Создать компанию клиента</a>
+    {% endif %}
+    </div>
+{% endblock %}

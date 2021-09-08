@@ -1,0 +1,95 @@
+{% extends 'adminlte/base.html' %}
+
+{% block content %}
+    {% for data_contract in contract %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Договор № {{ data_contract.number }} от {{ data_contract.date }} </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            {{ data_contract.customer.propety.name_short }} "{{ data_contract.customer.name }}"
+                        </h3>
+                    </div>
+                    <div class="box-body">
+                        ИНН: {{ data_contract.customer.inn }}<br>
+                        ОГРН: {{ data_contract.customer.ogrn }}<br>
+                        Телефон: {{ data_contract.customer.telephon }}<br>
+                        Сайт: {{ data_contract.customer.url }}<br>
+                        Юрадрес: -не работает- <br>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        Footer
+                    </div>
+                    <!-- /.box-footer-->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            {{ data_contract.seller.propety.name_short }} "{{ data_contract.seller.name }}"
+                        </h3>
+                    </div>
+                    <div class="box-body">
+                        ИНН: {{ data_contract.seller.inn }}<br>
+                        ОГРН: {{ data_contract.seller.ogrn }}<br>
+                        Телефон: {{ data_contract.seller.telephon }}<br>
+                        Сайт: {{ data_contract.seller.url }}<br>
+                        Юрадрес: -не работает- <br>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        Footer
+                    </div>
+                    <!-- /.box-footer-->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                           Последние заявки
+                        </h3>
+                    </div>
+                    <div class="box-body">
+
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        Footer
+                    </div>
+                    <!-- /.box-footer-->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                           Стоимость программ
+                        </h3>
+                    </div>
+                    <div class="box-body">
+
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        Footer
+                    </div>
+                    <!-- /.box-footer-->
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

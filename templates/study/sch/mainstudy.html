@@ -1,0 +1,73 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h3>{{ level_count }}</h3>
+              <p>Уровни обучения</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-mortar-board"></i>
+            </div>
+            <a href="{% url 'list_unit' 'level' %}" class="small-box-footer">
+              Подробнее <i class="fa fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>{{ field_count }}</h3>
+
+              <p>Область обучения</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-leanpub"></i>
+            </div>
+            <a href="{% url 'list_unit' 'field' %}" class="small-box-footer">
+              Подробнее <i class="fa fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3>{{ program_count }}</h3>
+
+              <p>Программы обучения</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-list-ul"></i>
+            </div>
+            <a href="{% url 'list_unit' 'program' %}" class="small-box-footer">
+              Подробнее <i class="fa fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3>{{ topic_count }}</h3>
+
+              <p>Темы обучения</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-book"></i>
+            </div>
+            <a href="#" class="small-box-footer">
+              Подробнее <i class="fa fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        </div>
+        <!-- ./col -->
+      </div>
+{% endblock %}

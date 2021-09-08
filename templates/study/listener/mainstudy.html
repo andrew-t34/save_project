@@ -1,0 +1,36 @@
+{% extends 'adminlte/base.html' %}
+
+
+{% block content %}
+
+    {% for program in programs %}
+
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <i class="fa fa-graduation-cap"></i>
+                    <h3 class="box-title">{{ program.name }}</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body" height="200">
+                    {{ program.fullname }}
+                </div>
+                <div class="box-footer">
+
+                        <div class="btn-group">
+                            <a href="{% url 'program_detail' program.id %}"
+                               class="btn btn-info btn-xs">Изучать</a>
+                            <a href="{% url 'update_sections' 'program' %}"
+                               class="btn btn-success  btn-xs">Пробный тест</a>
+                            <a href="{% url 'update_sections' 'program' %}"
+                               class="btn btn-danger btn-xs">Экзамен</a>
+                        </div>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+    {% endfor %}
+
+
+{% endblock %}

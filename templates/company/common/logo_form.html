@@ -1,0 +1,52 @@
+{% extends 'adminlte/base.html' %}
+{#{% load breadcrumbs %}#}
+
+{#{% block breadcrumbs %}#}
+{##}
+{#   {% breadcrumb 'New Employee' %}#}
+{#{% endblock %}#}
+
+{% block content %}
+    {% load crispy_forms_tags %}
+    <!-- general form elements -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Выбираем логотип компании</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+
+        <form novalidate action="{% url 'logo_post' %}" role="form" method="post" enctype='multipart/form-data'>
+        {{ form.id }}
+        {% csrf_token %}
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-2">
+                        <div>
+                            {% if company %}
+                                {% for comp in company %}
+                                    {% if comp.logo %}
+                                        <img src="{{ MEDIA_URL }}/media{{ comp.logo }}">
+                                    {% else %}
+                                        <img class="" width="200" height="200" src="{{ MEDIA_URL }}/media/company/logos/noimg.png">
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                </div>
+                <div class="col-md-4">
+                    {{ form.logo|as_crispy_field }}
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+
+        <div class="box-footer">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="{% url 'company' %}" type="button" class="btn btn-danger pull-right">Отменить</a>
+        </div>
+        </form>
+    </div>
+    <!-- /.box -->
+
+{% endblock %}

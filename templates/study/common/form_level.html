@@ -1,0 +1,31 @@
+{% extends 'adminlte/base.html' %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Добавте уровень обучения</h3>
+                    <a href="{% url 'list_unit' kwargs.factory %}" class="btn btn-default btn-xs pull-right">Назад</a>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form" action="{% url 'cu_study' kwargs.factory %}" method="post" role="form">
+
+                    {% csrf_token %}
+                    {{ form.id }}
+                    <div class="box-body">
+                        <div class="form-group">
+                            {{ form.name }}
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary btn-sm btn-flat pull-left">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

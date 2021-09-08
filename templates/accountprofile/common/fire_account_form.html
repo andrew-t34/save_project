@@ -1,0 +1,35 @@
+{% extends 'adminlte/base.html' %}
+
+
+{% block content %}
+    {% load crispy_forms_tags %}
+    <!-- general form elements -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Уволить сотрудника из компании?</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form novalidate action="{% url 'update_account' kwargs.factory 'del'%}" role="form" method="post"
+              enctype='multipart/form-data'>
+            {{ form.id }}
+            {% csrf_token %}
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        Вы уверены, что хотите уволить сотрудника:<br>
+                            {{ account_data.second }} {{ account_data.name }} {{ account_data.middle }}<br>
+                        Вернуть сотрудника можно будет только по запросу в техподдержку!!!
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Да, уволить</button>
+                <a href="{% url 'detail_account_profile' kwargs.pk %}" type="button" class="btn btn-default">Отмена</a>
+            </div>
+        </form>
+    </div>
+    <!-- /.box -->
+
+{% endblock %}

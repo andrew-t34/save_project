@@ -1,0 +1,46 @@
+{% extends 'adminlte/base.html' %}
+
+
+{% block content %}
+    {{ form.media.css }}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Создать программу</h3>
+                    <a href="{% url 'list_unit' kwargs.factory%}" class="btn btn-default btn-xs pull-right">Назад</a>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form" action="{% url 'cu_study' kwargs.factory %}" method="post" role="form">
+                    {{ form.media.css }}
+                    {% csrf_token %}
+                    {{ form.id }}
+                    <div class="box-body">
+                        <div class="form-group {% if form.level_id.errors %} has-error {% endif %}">
+                            {{ form.level }}
+                            <p class="help-block">Выбрать уровнь для сортировки области.</p>
+                        </div>
+                        <div class="form-group {% if form.level_id.errors %} has-error {% endif %}">
+                            {{ form.field_id }}
+                            <p class="help-block">Область сортируется взависимости от уровня обучения</p>
+                        </div>
+                        <div class="form-group">
+                            {{ form.name }}
+                            <p class="help-block">Название программы должно быть не более 200 символов</p>
+                        </div>
+                        <div class="form-group">
+                            {{ form.fullname }}
+                            <p class="help-block">Введите полное название программы</p>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+                {{ form.media.js }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

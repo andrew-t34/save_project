@@ -1,0 +1,76 @@
+{% extends 'adminlte/base.html' %}
+
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+          <!-- general form elements -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+                {% if not kwargs.pk %}
+                    <h3 class="box-title">Новая компания</h3>
+                {% else %}
+                    <h3 class="box-title">Изменить данные компании</h3>
+                {% endif %}
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+                <form novalidate action="{% url 'update' factory %}" role="form" method="post" enctype='multipart/form-data'>
+              {{ form.id }}
+              {% csrf_token %}
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group {% if form.propety_id.errors%} has-error {% endif%}">
+                      {{ form.propety_id|as_crispy_field }}
+                    </div>
+                    <div class="form-group {% if form.ogrn.errors%} has-error {% endif%}">
+                      {{ form.ogrn|as_crispy_field }}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group {% if form.name.errors%} has-error {% endif%}">
+                      {{ form.name|as_crispy_field }}
+                    </div>
+                    <div class="form-group {% if form.inn.errors%} has-error {% endif%}">
+                      {{ form.inn|as_crispy_field }}
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group {% if form.url.errors%} has-error {% endif%}">
+                      {{ form.url|as_crispy_field }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group {% if form.telephon.errors%} has-error {% endif%}">
+                      {{ form.telephon|as_crispy_field }}
+                    </div>
+                  </div>
+                <div class="col-md-2">
+{#                    <div class="form-group">#}
+{#                        <div>{% if company %}{% for comp in company %}<img src="{{ MEDIA_URL }}/media{{ comp.logo }}"> {% endfor %} {% endif %}</div>#}
+{#                    </div>#}
+                </div>
+{#                  <div class="col-md-4">#}
+{#                      {{ form.logo|as_crispy_field }}#}
+{#                  </div>#}
+                  </div>
+                  <div class="form-group {% if form.text.errors%} has-error {% endif%}">
+                    {{ form.text|as_crispy_field }}
+                  </div>
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                  <a href="{% url 'customers' %}" type="button" class="btn btn-default">Отмена</a>
+              </div>
+            </form>
+          </div>
+          <!-- /.box -->
+
+{% endblock %}
