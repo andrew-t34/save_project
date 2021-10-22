@@ -1,6 +1,9 @@
 {% load static %}<!DOCTYPE html>
 
+
 <html>
+
+
 <head>
     {% block title_outer %}
         <title>{% block title %}{{ site.name }}{% endblock %}</title>
@@ -46,14 +49,17 @@
 
                                     {% endblock %}
                                 </div>
+
                                 {% block no_description %}
                                     {% include 'adminlte/libre/_description.html' %}
                                 {% endblock %}
                             </h1>
+                            {% load django_bootstrap_breadcrumbs %}
                             {% block breadcrumbs %}
-
-
+                                {% clear_breadcrumbs %}
+                                {% breadcrumb_safe '<i class="fa fa-dashboard"></i> Главная' "/" %}
                             {% endblock %}
+                            {% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap3.html" %}
                         {% endblock no_heading %}
                     </section>
                 {% endblock %}
@@ -66,6 +72,7 @@
 
                         {% block content_block_wrap %}
                             {% block content %}
+
 
 
 
@@ -91,33 +98,33 @@
 
 {% block extra_foot %}{% endblock %}
 
-    <script type="text/javascript">
-        $('a#delete').confirm({
-            title: 'ВНИМАНИЕ!!!',
-            type: 'red',
-            content: function () {
-               {#var text = $('#needdata').text();#}
-               {#console.log(text)#}
-               {# if (text) {#}
-               {#     return 'Вы хотите удалить данные ('+text+')?'#}
-               {# } else {return 'Вы действительно хотите удалить эти данные?'}#}
-                return 'Вы действительно хотите удалить эти данные?'
-            },
-            autoClose: 'no|3000',
-            buttons: {
-                yes: {
-                    text: 'Да',
-                    btnClass: 'btn-red',
-                    action: function () {
-                        location.href = this.$target.attr('href');
-                    }
-                },
-                no: {
-                   text: 'Нет',
-                   btnClass: 'btn-green',
+<script type="text/javascript">
+    $('a#delete').confirm({
+        title: 'ВНИМАНИЕ!!!',
+        type: 'red',
+        content: function () {
+            {#var text = $('#needdata').text();#}
+            {#console.log(text)#}
+            {# if (text) {#}
+            {#     return 'Вы хотите удалить данные ('+text+')?'#}
+            {# } else {return 'Вы действительно хотите удалить эти данные?'}#}
+            return 'Вы действительно хотите удалить эти данные?'
+        },
+        autoClose: 'no|3000',
+        buttons: {
+            yes: {
+                text: 'Да',
+                btnClass: 'btn-red',
+                action: function () {
+                    location.href = this.$target.attr('href');
                 }
+            },
+            no: {
+                text: 'Нет',
+                btnClass: 'btn-green',
             }
-        });
-    </script>
+        }
+    });
+</script>
 </body>
 </html>

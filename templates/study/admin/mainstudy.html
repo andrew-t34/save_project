@@ -1,4 +1,11 @@
 {% extends 'adminlte/base.html' %}
+
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+            {{ block.super }}
+            {% breadcrumb 'Разделы' "users_and_groups_index" %}
+ {% endblock %}
 {% block content %}
 
     <div class="row">

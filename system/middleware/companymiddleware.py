@@ -4,7 +4,7 @@ from company.models import Company
 
 def select_activated_user_company(get_response):
     def middleware(request):
-        if request.user.id is not None:
+        if request.user.id is not None and not request.user.is_superuser:
             if 'company_id' not in request.session:
                 if request.session['group']['name'] == 'sch' or request.session['group']['name'] == 'hse':
                     company_id = Company.objects.get(user_id=request.user.id, activated=1)

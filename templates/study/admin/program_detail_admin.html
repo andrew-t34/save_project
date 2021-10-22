@@ -1,20 +1,34 @@
 {% extends 'adminlte/base.html' %}
 
-
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+            {{ block.super }}
+            {% breadcrumb 'Разделы' "studymain" %}
+            {% breadcrumb 'Список програм' "list_unit" factory='program'  %}
+            {% breadcrumb 'Программа' "program_detail" kwargs.program_id %}
+ {% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-md-12">
             <div class="box box-solid">
                 <div class="box-header with-border">
                     <i class="fa fa-text-width"></i>
-                    <h3 class="box-title">{{ program }}</h3>
-                    <a href="{% url 'cu_study' kwargs.program_id 'program' %}" class="text-green pull-right">
+                    <h3 class="box-title">{{ program.name|upper }}</h3>
+                    <a href="{% url 'cu_study' 'program' kwargs.program_id %}" class="text-green pull-right">
                         <i class="fa fa-pencil"></i>
                     </a>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    {{ program.fullname|upper }}
+                    <table class="table-hover">
+                        <tr>
+                            <td>{{ program.fullname }}</td>
+                            <td></td>
+                        </tr>
+
+
+                    </table>
+
                 </div>
             </div>
         </div>
@@ -24,12 +38,13 @@
             <!-- Custom Tabs -->
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
+                    <li class=""><a href="#" data-toggle="control-sidebar">
+                        <i class="fa fa-list"></i> Оглавление</a></li>
                     <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="false">Текст</a></li>
-                    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="true">Оглавление</a></li>
-                    <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Видео</a></li>
-                    <li class=""><a href="#tab_4" data-toggle="tab" aria-expanded="false">Полезные ссылки</a></li>
-                    <li class=""><a href="#tab_5" data-toggle="tab" aria-expanded="false">Вопросы</a></li>
-                    <li class=""><a href="#tab_6" data-toggle="tab" aria-expanded="false">Комментарии</a></li>
+                    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Видео</a></li>
+                    <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Полезные ссылки</a></li>
+                    <li class=""><a href="#tab_4" data-toggle="tab" aria-expanded="false">Вопросы</a></li>
+                    <li class=""><a href="#tab_5" data-toggle="tab" aria-expanded="false">Комментарии</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                             Действия <span class="caret"></span>
@@ -45,13 +60,17 @@
                                     Создать тему
                                 </a>
                             </li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="{% url 'list_unit' program.id 'question' %}">Вопросы
+                                    к теме</a>
                             </li>
                             <li role="presentation" class="divider"></li>
                             <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
                         </ul>
                     </li>
-                    <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
+                    {#                    <li class="pull-right"><a href="#" class="text-muted" data-toggle="control-sidebar">#}
+                    {#                        Оглавление#}
+                    {#                        <i class="fa fa-gear"></i></a></li>#}
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
@@ -60,7 +79,6 @@
                                 <div class="box-header with-border">
                                     <i class="fa fa-text-width"></i>
                                     <h3 class="box-title"><strong>МОДУЛЬ: </strong>{{ topic.module.name|upper }} </h3>
-                                    <a href="" class="btn btn-success pull-right btn-xs">Редактировать</a>
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
@@ -88,7 +106,7 @@
                                         <div class="description-block">
                                             <h5 class="description-header">Вы прочитали</h5>
                                             <span class="description-text">
-                                                Тему {{ topic_obj.number }}  из  {{ topic_obj.paginator.num_pages }}.
+                                            Тему {{ topic_obj.number }}  из  {{ topic_obj.paginator.num_pages }}.
                                             </span>
                                         </div>
                                         <!-- /.description-block -->
@@ -109,54 +127,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane" id="tab_2">
-                        <div class="box-body">
-                            <table class="table table-hover">
-                                {% for module in modules %}
-                                    <tr>
-                                        <td>
-                                            {{ module.number }}.
-                                        </td>
-                                        <td>
-                                            {{ module.name }}
-                                        </td>
-                                        <td>
-                                            <a href="{% url 'cu_study' kwargs.program_id 'module' module.id %}"
-                                               class="text-green">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                        </td>
-                                        {% for topic in topics %}
-                                            {% if topic.module_id == module.id %}
-                                                <tr>
-                                                    <td>{{ module.number }}.{{ topic.topic_number }}</td>
-                                                    <td>
-                                                        <a href="{% url 'program_detail' kwargs.program_id %}?page={{ forloop.counter }}">
-                                                            {{ topic.title }}
-                                                        </a>
-                                                    </td>
-                                                    <td>
+                    <!-- /.tab-pane -->
 
-                                                    </td>
-                                                </tr>
-                                            {% endif %}
-                                        {% endfor %}
-                                    <tr>
-                                        <td></td>
-                                        <td class="text-red">В этом модуле нет тем.
-                                            {# <a href="{% url 'update_topic' kwargs.kwargs.program_id module.id 'topic' %} "#}
-                                            <a href="" class="text-light-blue"> Добавить
-                                            </a>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    </tr>
-                                {% endfor %}
-                            </table>
-                        </div>
+                    <div class="tab-pane" id="tab_2">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        It has survived not only five centuries, but also the leap into electronic typesetting,
+                        remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
+                        sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+                        like Aldus PageMaker including versions of Lorem Ipsum.
                     </div>
-                    <!-- /.tab-pane -->
-                    <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_3">
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                         Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
@@ -169,28 +150,22 @@
                     <!-- /.tab-pane -->
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_4">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                        It has survived not only five centuries, but also the leap into electronic typesetting,
-                        remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
-                        sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                        like Aldus PageMaker including versions of Lorem Ipsum.
+                        {% if questions %}
+                            {% for question in questions %}
+                                {{ question.text }}
+                            {% endfor %}
+                        {% else %}
+                            <div class="alert alert-info alert-dismissible">
+                                <h4><i class="icon fa fa-ban "></i> Внимание!!!</h4>
+                                <p class="text-center"><strong>ДЛЯ ДАННОЙ ТЕМЫ ЕЩЕ НЕ РАЗРАБОТАНЫ ТЕСТОВЫЕ
+                                    ВОПРОСЫ</strong></p>
+                            </div>
+                            <a href="{% url 'cu_study' kwargs.program_id 'question' %}" class="btn btn-block btn-warning btn-flat">Создать</a>
+                        {% endif %}
                     </div>
                     <!-- /.tab-pane -->
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_5">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                        It has survived not only five centuries, but also the leap into electronic typesetting,
-                        remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
-                        sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                        like Aldus PageMaker including versions of Lorem Ipsum.
-                    </div>
-                    <!-- /.tab-pane -->
-                    <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_6">
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                         Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
                         when an unknown printer took a galley of type and scrambled it to make a type specimen book.
@@ -207,4 +182,80 @@
         </div>
         <!-- /.col -->
     </div>
+    <aside class="control-sidebar control-sidebar-dark control-sidebar">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a href="#control-sidebar-theme-demo-options-tab" data-toggle="tab" aria-expanded="true"><i
+                    class="fa fa-list"></i> ОГЛАВЛЕНИЕ</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <ul style="list-style-type: none;">
+                {% for module in modules %}
+                    <li>
+                        <strong>{{ module.number }}.</strong>
+                        <strong>{{ module.name }}</strong>
+                        <a href="{% url 'cu_study' kwargs.program_id 'module' module.id %}" class="text-green">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </li>
+                    <ul style="list-style-type: none;">
+                        {% for topic in topics %}
+                            {% if topic.module_id == module.id %}
+                                <li>
+                                    {{ module.number }}.{{ topic.topic_number }}
+                                    <a href="{% url 'program_detail' kwargs.program_id %}?page={{ forloop.counter }}">
+                                        {{ topic.title }}
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+        </div>
+    </aside>
+
+
+
+    {#        <div class="con">#}
+    {##}
+    {#      <!-- Left tooltip -->#}
+    {#    <div class="con-tooltip left">#}
+    {#      <p> Left </p>#}
+    {#      <div class="tooltip ">#}
+    {#        <p>Left</p>#}
+    {#      </div>#}
+    {##}
+    {#    </div>#}
+    {##}
+    {##}
+    {#      <!-- Top tooltip-->#}
+    {#      <div class="con-tooltip top">#}
+    {#        <p> Top </p>#}
+    {#        <div class="tooltip ">#}
+    {#          <p>Top</p>#}
+    {#        </div>#}
+    {#      </div>#}
+    {##}
+    {##}
+    {#      <!-- Bottom tooltip-->#}
+    {#      <div class="con-tooltip bottom">#}
+    {#        <p> bottom </p>#}
+    {#        <div class="tooltip ">#}
+    {#          <p>bottom</p>#}
+    {#        </div>#}
+    {#      </div>#}
+    {##}
+    {#      <!-- Right tooltip-->#}
+    {#    <div class="con-tooltip right">#}
+    {#      <p> Right </p>#}
+    {#      <div class="tooltip ">#}
+    {#        <p>Right</p>#}
+    {#      </div>#}
+    {#    </div>#}
+    {##}
+    {#      <!--      End con = Container-->#}
+    {#    </div>#}
 {% endblock %}

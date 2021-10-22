@@ -46,11 +46,13 @@ INSTALLED_APPS = [
     # Optional: Django admin theme (must be before django.contrib.admin)
     'ckeditor',
     'ckeditor_uploader',
-    'django_adminlte_theme',
+    # 'django_adminlte_theme',
     'django_tables2',
     'django_filters',
     'bootstrap_datepicker_plus',
-    'django_ajax',
+    'django_bootstrap_breadcrumbs',
+    'django_ajax_tables',
+    # 'django_ajax',
     'company',
     'contract',
     'main',
@@ -74,6 +76,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'oshstudy.urls'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 TEMPLATES = [
     {
@@ -105,9 +108,9 @@ INTERNAL_IPS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'studyschool',
+        'NAME': 'study_school',
         'USER': 'andrew',
-        'PASSWORD': '12345',
+        'PASSWORD': '123',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

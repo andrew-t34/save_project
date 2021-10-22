@@ -50,10 +50,14 @@ class ProgramForm(forms.Form):
 
     id = forms.IntegerField(label='id', required=False, widget=forms.HiddenInput())
 
-    level = forms.ModelChoiceField(
+    field__level = forms.ModelChoiceField(
         queryset=Level.objects.all(),
         label=u"Уровень обучения",
-        widget=autocomplete.ModelSelect2(url='level-dal')
+        widget=autocomplete.ModelSelect2(
+            url='level-dal',
+            attrs={
+                'class': 'form-control'
+            })
     )
 
     field_id = forms.ModelChoiceField(
@@ -62,6 +66,9 @@ class ProgramForm(forms.Form):
         widget=autocomplete.ModelSelect2(
             url='field-dal',
             forward=['level'],
+            attrs={
+                'class': 'form-control'
+            }
         )
     )
 
@@ -156,3 +163,79 @@ class TopicForm(forms.Form):
     text = forms.CharField(
         label='Содержание',
         widget=CKEditorUploadingWidget())
+
+
+class QuestionForm(forms.Form):
+
+    id = forms.IntegerField(label='id', required=False, widget=forms.HiddenInput())
+
+    program_id = forms.IntegerField(label='Программа обучения', widget=forms.HiddenInput())
+
+    module_id = forms.ModelChoiceField(
+        queryset=Module.objects.all(),
+        label='Модуль обучения',
+        widget=autocomplete.ModelSelect2(
+            url='module-dal',
+            forward=['program_id'],
+            attrs={
+                'data-placeholder': 'Укажите модуль',
+                'style': "width: 100%",
+            }
+        )
+    )
+
+    topic_id = forms.ModelChoiceField(
+        queryset=Topic.objects.all(),
+        label='Тема обучения',
+        widget=autocomplete.ModelSelect2(
+            url='topic_dal',
+            forward=['module_id'],
+            attrs={
+                'data-placeholder': 'Укажите тему',
+                'style': "width: 100%",
+            }
+        )
+    )
+
+    text = forms.CharField(
+        max_length=1000,
+        label="Название модуля",
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control'
+            }
+        )
+    )
+
+
+class TableQuestionFilter(forms.Form):
+    program_id = forms.IntegerField(label='Программа обучения', widget=forms.HiddenInput())
+
+    module_id = forms.ModelChoiceField(
+        queryset=Module.objects.all(),
+        label='Модуль обучения',
+        required=True,
+        widget=autocomplete.ModelSelect2(
+            url='module-dal',
+            forward=['program_id'],
+            attrs={
+                'data-placeholder': 'Укажите модуль',
+                'style': "width: 100%",
+            }
+        )
+    )
+
+    topic_id = forms.ModelChoiceField(
+        queryset=Topic.objects.all(),
+        label='Тема обучения',
+        required=True,
+        widget=autocomplete.ModelSelect2(
+            url='topic_dal',
+            forward=['module_id'],
+            attrs={
+                'data-placeholder': 'Укажите тему',
+                'style': "width: 100%",
+            }
+        )
+    )
+

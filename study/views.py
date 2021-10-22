@@ -2,13 +2,12 @@ from django.shortcuts import render
 from .models import *
 from django.views.generic.base import View
 from .factory import Configurator
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from django.http import Http404
 from system.mixins.permission import PermissionGroupMixin
 from dal import autocomplete
 from django.core.paginator import Paginator
-from django.http import request
+
 
 
 # Create your views here.
@@ -26,14 +25,17 @@ class BaseController:
         """configurator - получаем из factory см. метод init"""
         if 'factory' in kwargs:
             """Проверяем есть ли метко для выбора фабрики. Передается через URL"""
-            if kwargs['factory'] in obj.permission_list_of_factories:
+            if kwargs['factory'] in obj.permission_factory_list:
                 """permission_list_of_factories - перечень фабрик доступных для группы пользователей"""
                 """представлен в файле этой группы папки access_view"""
-                factory_obj = obj.select_form_factory(request=request, keys=kwargs)
+                factory_obj = obj.select_form_factory(
+                    request=request,
+                    data_url=kwargs,
+                    obj_group=obj)
                 """создали и вернули объект конкретной фабрики в зависимости от названия в kwargs"""
                 """сам метод select_form_factory находится в родительском классе полученного обекта obj"""
                 return factory_obj
-            """Если фабрики форм нет возвращаем объект соответствуещей группы из factory.py"""
+            """Если фабрики форм не запрашивается, возвращаем объект соответствуещей группы из factory.py"""
         return obj
 
 
@@ -94,10 +96,14 @@ class ListUnit(PermissionGroupMixin, BaseController, View):
 
     def get(self, request, **kwargs):
         obj = self.get_obj(request, kwargs)
-        return render(request, obj.chosen_factory.template_list, {
-            'units': obj.chosen_factory.list.get_list(),
+        return render(request, obj.list.template_list, {
+            'units': obj.list.get_list(),
             'kwargs': kwargs,
+            'form': obj.list.get_filter_form() if hasattr(obj.list, 'get_filter_form') else False
         })
+
+    # def post(self, request, **kwargs):
+    #     obj = self.get_obj(request, kwargs)
 
 
 class ProgramDetail(PermissionGroupMixin, BaseController, View):
@@ -110,15 +116,18 @@ class ProgramDetail(PermissionGroupMixin, BaseController, View):
     def get(self, request, **kwargs):
         obj = self.get_obj(request, kwargs)
         program = Program.objects.get(id=kwargs['program_id'])
+        questions = Question.objects.filter(program_id=kwargs['program_id'])
         modules = program.modules.all().values()
-        topics = Topic.objects.filter(program_id=kwargs['program_id']).values()
+        topics = Topic.objects.filter(
+            program_id=kwargs['program_id']).select_related('module', 'program').order_by('module')
         paginator = Paginator(topics, 1)
         page_number = request.GET.get('page')
         return render(request, obj.template, {'kwargs': kwargs,
                                               'program': program,
                                               'modules': modules,
                                               'topics': topics,
-                                              'topic_obj': paginator.get_page(page_number)})
+                                              'topic_obj': paginator.get_page(page_number),
+                                              'questions': questions})
 
 
 class LevelAutocomplete(autocomplete.Select2QuerySetView):
@@ -159,4 +168,18 @@ class ModuleAutocomplete(autocomplete.Select2QuerySetView):
             qs = qs.filter(program_id=program)
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
+        return qs
+
+
+class TopicAutocomplete(autocomplete.Select2QuerySetView):
+
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Topic.objects.none()
+        qs = Topic.objects.all()
+        module = self.forwarded.get('module_id', None)
+        if module:
+            qs = qs.filter(module_id=module)
+        if self.q:
+            qs = qs.filter(title__istartswith=self.q)
         return qs

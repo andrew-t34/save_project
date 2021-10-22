@@ -12,13 +12,13 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form role="form" action="{% url 'cu_study' kwargs.factory %}" method="post" role="form">
+                <form role="form" action="{% url 'cu_study' kwargs.factory %}" method="post" role="form" novalidate>
                     {{ form.media.css }}
                     {% csrf_token %}
                     {{ form.id }}
                     <div class="box-body">
                         <div class="form-group {% if form.level_id.errors %} has-error {% endif %}">
-                            {{ form.level }}
+                            {{ form.field__level }}
                             <p class="help-block">Выбрать уровнь для сортировки области.</p>
                         </div>
                         <div class="form-group {% if form.level_id.errors %} has-error {% endif %}">
