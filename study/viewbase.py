@@ -5,6 +5,7 @@ from django_tables2 import RequestConfig
 from .filters import QuestionFilter
 from django.db.models import Q
 
+
 class LevelFactory:
 
     def __init__(self, kwargs):
@@ -465,7 +466,6 @@ class QuestionList:
         else:
             data = self.obj_model.obj_group.question_data.select_related('topic__module', 'program').filter(
                 program_id=self.obj_model.data_url['program_id'])
-        # return QuestionFilter(self.obj_model.request.GET, data)
         return data
 
     def get_filter_form(self):
@@ -482,6 +482,96 @@ class QuestionList:
         return form
 
 
+class AnswerFactory:
+
+    def __init__(self, data):
+        self.data = data
+        self.template_form = 'study/common/form_answer.html'
+        self.redirect_url = 'list_unit'
+        self.model = AnswerFactoryModel(self.data)
+        self.form = AnswerFactoryForm(self.model)
+
+    @property
+    def kwargs_redirect(self):
+        if 'delete' in self.data['data_url']:
+            self.data['data_url'].pop('delete')
+            self.data['data_url'].pop('pk')
+        return self.data['data_url']
+
+    @property
+    def list(self):
+        return AnswerList(self.model)
+
+
+class AnswerFactoryForm:
+
+    def __init__(self, model):
+        self.model_obj = model
+
+    def get_form(self):
+        if self.model_obj.request.POST:
+            form = AnswerForm(self.model_obj.request.POST or None)
+        elif 'pk' in self.model_obj.data_url:
+            form = AnswerForm(self.model_obj.get_data_form())
+        else:
+            form = AnswerForm(initial={
+                'question_id': self.model_obj.data_url['question_id'],
+                'program_id': self.model_obj.data_url['program_id']
+            })
+        return form
+
+
+class AnswerFactoryModel:
+
+    def __init__(self, data):
+        self.data_url = data['data_url']
+        self.request = data['request']
+        self.obj_group = data['obj_group']
+
+    def get_data_form(self):
+        if 'pk' in self.data_url:
+            obj = self.obj_group.answer_data.filter(id=self.data_url['pk']).select_related('question').values(
+                'id', 'question_id', 'program_id', 'text', 'correct'
+            )
+            return obj[0]
+        else:
+            return {}
+
+    def del_data(self):
+        obj = self.obj_group.answer_data.filter(id=self.data_url['pk'])
+        if obj.delete():
+            return True
+        return False
+
+    def make_save(self, cleaned_data):
+        obj, created = Answer.objects.update_or_create(
+            id=cleaned_data['id'],
+            defaults={
+                'program_id': cleaned_data['program_id'],
+                'question_id': cleaned_data['question_id'],
+                'text': cleaned_data['text'],
+                'correct': cleaned_data['correct']},
+        )
+        return obj, created
+
+
+class AnswerList:
+
+    def __init__(self, model):
+        self.obj_model = model
+
+    @property
+    def template_list(self):
+        return self.obj_model.obj_group.template_factory_list[self.obj_model.data_url['factory']]
+
+    def get_list(self):
+        table_list = AnswerTable(self.obj_model.obj_group.answer_data.select_related('question').filter(
+                question_id=self.obj_model.data_url['question_id']
+            ))
+        RequestConfig(self.obj_model.request, paginate={"per_page": 10}).configure(table_list)
+        return table_list
+
+
 class StudyBase:
     dict_of_factories = dict(
         level=LevelFactory,
@@ -490,6 +580,7 @@ class StudyBase:
         module=ModuleFactory,
         topic=TopicFactory,
         question=QuestionFactory,
+        answer=AnswerFactory,
     )
 
     def __init__(self):
@@ -499,6 +590,7 @@ class StudyBase:
         self.topic_data = Topic.objects.all()
         self.module_data = Module.objects.all()
         self.question_data = Question.objects.all()
+        self.answer_data = Answer.objects.all()
 
     def select_form_factory(self, **kwargs):
         if kwargs['data_url']['factory'] in self.dict_of_factories:

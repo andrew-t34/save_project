@@ -165,22 +165,29 @@ class Question(models.Model):
 
 class Answer(models.Model):
 
-    question = models.ForeignKey(
-        Topic,
+    program = models.ForeignKey(
+        Program,
         null=True,
         on_delete=models.SET_NULL,
         verbose_name="Программа обучения",
+        related_name='answer_programs')
+
+    question = models.ForeignKey(
+        Question,
+        null=True,
+        on_delete=models.SET_NULL,
+        verbose_name="Тестовый вопрос",
         related_name='questions')
 
     text = models.TextField(
-        verbose_name="Текст вопроса")
+        verbose_name="Текст ответа")
 
     correct = models.BooleanField(
         default=False,
         verbose_name='Статус ответа')
 
     class Meta:
-        verbose_name_plural = "Темы обучения"
+        verbose_name_plural = "Ответы на вопросы"
 
     def __str__(self):
         return self.text

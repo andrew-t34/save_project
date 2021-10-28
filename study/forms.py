@@ -208,6 +208,24 @@ class QuestionForm(forms.Form):
     )
 
 
+class AnswerForm(forms.Form):
+    id = forms.IntegerField(label='id', required=False, widget=forms.HiddenInput())
+    program_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
+    question_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
+
+    text = forms.CharField(
+        max_length=500,
+        label='Ответ',
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control'
+            }
+        )
+    )
+
+    correct = forms.BooleanField(required=False)
+
+
 class TableQuestionFilter(forms.Form):
     program_id = forms.IntegerField(label='Программа обучения', widget=forms.HiddenInput())
 

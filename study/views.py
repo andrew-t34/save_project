@@ -110,24 +110,23 @@ class ProgramDetail(PermissionGroupMixin, BaseController, View):
     permission_required = ['admin', 'sch', 'listener']
 
     def __init__(self, *args, **kwargs):
+        self.module_list = []
         self._class_name = self.__class__.__name__
         super().__init__(*args, **kwargs)
 
     def get(self, request, **kwargs):
         obj = self.get_obj(request, kwargs)
-        program = Program.objects.get(id=kwargs['program_id'])
-        questions = Question.objects.filter(program_id=kwargs['program_id'])
-        modules = program.modules.all().values()
         topics = Topic.objects.filter(
             program_id=kwargs['program_id']).select_related('module', 'program').order_by('module')
         paginator = Paginator(topics, 1)
-        page_number = request.GET.get('page')
+        for module in topics:
+            self.module_list.append(module.module)
+        page_number = request.GET.get('page') if 'page' in request.GET else 1
         return render(request, obj.template, {'kwargs': kwargs,
-                                              'program': program,
-                                              'modules': modules,
+                                              'modules': list(set(self.module_list)),
                                               'topics': topics,
-                                              'topic_obj': paginator.get_page(page_number),
-                                              'questions': questions})
+                                              'topic_obj': paginator.page(page_number),
+                                              })
 
 
 class LevelAutocomplete(autocomplete.Select2QuerySetView):
