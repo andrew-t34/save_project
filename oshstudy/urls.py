@@ -29,6 +29,7 @@ urlpatterns = [   path('admin/', admin.site.urls),
                   path('accounts/', include('django.contrib.auth.urls')),
                   path('study/', include('study.urls')),
                   path('ckeditor/', include('ckeditor_uploader.urls')),
+                  path('comments/', include('django_comments_xtd.urls')),
               ]
 
 

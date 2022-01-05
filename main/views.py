@@ -9,7 +9,7 @@ from .viewbase import MainBase, MainFactory
 # Create your views here.
 
 class Main(MainBase):
-    permission_required = ['admin', 'listener', 'sch', 'hse']
+    permission_required = ['admin', 'lst', 'sch', 'hse']
 
     def get(self, request):
         factory = MainFactory(request).get_object_group()

@@ -3,14 +3,14 @@
 {% block breadcrumbs %}
             {{ block.super }}
             {% breadcrumb 'Разделы' "studymain" %}
-            {% breadcrumb 'Программы' "studymain" %}
+            {% breadcrumb 'Список програм' "list_unit" 'program' %}
  {% endblock %}
 
 
 {% block content %}
     <div class="row">
         <div class="pad margin no-print">
-            <a href="{% url 'cu_study' kwargs.factory %}" class="btn btn-block btn-warning btn-lg">Добавить программу</a>
+            <a href="{% url 'create_unit' kwargs.factory %}" class="btn btn-block btn-warning btn-lg">Добавить программу</a>
         </div>
     </div>
     <div class="row">
@@ -29,14 +29,31 @@
                                 <td>{{ unit.field }}</td>
                                 <td>{{ unit.name }}</td>
                                 <td>{{ unit.fullname }}</td>
-                                <td style="width: 40px"><a href="{% url 'program_detail' unit.id %}"
-                                                           class="badge bg-orange"><i
-                                        class="fa fa-search"></i></a></td>
-                                <td style="width: 40px"><a href="{% url 'cu_study' kwargs.factory unit.id %}"
-                                                           class="badge bg-green"><i class="fa fa-pencil"></i></a></td>
-                                <td style="width: 40px"><a href="{% url 'cu_study' kwargs.factory unit.id 'del' %}"
-                                                           class="badge bg-red" id="delete"><i
-                                        class="fa fa-trash"></i></a></td>
+                                <td style="width: 40px">
+                                    <a href="{% url 'program_detail' unit.id %}" class="badge bg-orange">
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                </td>
+                                <td style="width: 40px">
+                                    <a href="{% url 'update_unit' kwargs.factory unit.id %}" class="badge bg-green">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                </td>
+                                <td style="width: 40px">
+                                    <a href="{% url 'list_unit' unit.id 'topic' %}" class="badge bg-blue">
+                                        <i class="fa fa-list"></i>
+                                    </a>
+                                </td>
+                                <td style="width: 40px">
+                                    <a href="{% url 'list_unit' unit.id 'question' %}" class="badge bg-aqua">
+                                        <i class="fa fa-graduation-cap"></i>
+                                    </a>
+                                </td>
+                                <td style="width: 40px">
+                                    <a href="{% url 'delete_unit' kwargs.factory unit.id 'delete' %}" class="badge bg-red" id="delete">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>

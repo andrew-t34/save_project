@@ -1,17 +1,16 @@
 {% extends 'study/admin/list_question.html' %}
 
 {% load django_bootstrap_breadcrumbs %}
-{% load ajax_table %}
 {% block breadcrumbs %}
             {{ block.super }}
-            {% breadcrumb "Ответы" "list_unit" kwargs.program_id 'question' %}
+            {% breadcrumb "Ответы" "list_answer" kwargs.program_id kwargs.module_id kwargs.topic_id 'answer' %}
  {% endblock %}
 {% load render_table from django_tables2 %}
 
 {% block content %}
     <div class="row">
         <div class="pad margin no-print">
-            <a href="{% url 'cu_study' kwargs.program_id kwargs.question_id kwargs.factory %}" class="btn btn-block btn-warning btn-lg">
+            <a href="{% url 'cu_answer' kwargs.program_id kwargs.question_id kwargs.factory %}" class="btn btn-block btn-warning btn-lg">
                 Добавить ответ
             </a>
         </div>

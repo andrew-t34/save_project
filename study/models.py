@@ -136,6 +136,9 @@ class Topic(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('program_detail', kwargs={'program_id': self.program.id, 'topic_id': self.id})
+
 
 class Question(models.Model):
 

@@ -22,7 +22,7 @@ class MainFactory:
             obj = MainAdmin()
         elif self.group == 'hse':
             obj = MainHse()
-        elif self.group == 'listener':
+        elif self.group == 'lst':
             obj = MainListener()
         elif self.group == 'sch':
             obj = MainSchool()
@@ -48,7 +48,7 @@ class MainHse(MainBase):
 
 
 class MainListener(MainBase):
-    permission_required = ['listener']
+    permission_required = ['lstr']
 
     def get(self, request):
         text = 'Это главная страница нового проекта для Listener'

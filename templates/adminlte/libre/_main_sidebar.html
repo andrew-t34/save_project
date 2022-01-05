@@ -24,56 +24,92 @@
                     <li class="header">{% block nav_heading %}MAIN NAVIGATION{% endblock %}</li>
 
                     {% block nav_links %}
-                        <li>
-                            <a href="{% url 'company' %}">
-                                <i class="fa fa-dashboard"></i> <span>Моя компания</span>
-                            </a>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-group"></i> <span>Клиенты</span>
-                                <span class="pull-right-container">
+                        {% if request.user.group == 'admin' %}
+                            <li>
+                                <a href="{% url 'company' %}">
+                                    <i class="fa fa-dashboard"></i> <span>Моя компания</span>
+                                </a>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-group"></i> <span>Клиенты</span>
+                                    <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li>
-                                    <a href="{% url 'customers' %}">
-                                        <i class="fa fa-user"></i>Клиенты
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'contract_main' %}">
-                                        <i class="fa fa-user"></i>Контракты
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'list_price' %}">
-                                        <i class="fa fa-user"></i>Цены программ
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-university"></i> <span>Обучение</span>
-                                <span class="pull-right-container">
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="{% url 'customers' %}">
+                                            <i class="fa fa-user"></i>Клиенты
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'contract_main' %}">
+                                            <i class="fa fa-user"></i>Контракты
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'list_price' %}">
+                                            <i class="fa fa-user"></i>Цены программ
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-university"></i> <span>Обучение</span>
+                                    <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li>
-                                    <a href="{% url 'studymain' %}">
-                                        <i class="fa fa-user"></i> Управление разделами
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-user"></i> Программы обучения
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="{% url 'studymain' %}">
+                                            <i class="fa fa-user"></i> Управление разделами
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-user"></i> Программы обучения
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% elif request.user.group == 'sch' %}
+
+                        {% else %}
+                            <li>
+                                <a href="{% url 'company' %}">
+                                    <i class="fa fa-dashboard"></i> <span>Мои данные</span>
+                                </a>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-university"></i> <span>Обучение</span>
+                                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="{% url 'studymain' %}">
+                                            <i class="fa fa-book"></i> Мои программы
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-question"></i> Пробдное тестирование
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-graduation-cap"></i> Экзамен
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        {% endif %}
                     {% endblock nav_links %}
                 {% endblock nav_links_outer %}
             </ul>

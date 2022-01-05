@@ -6,18 +6,18 @@ import itertools
 
 TEMPLATE_QUESTION_ACTION = '''
    <div class="btn-group">
-       <a href="{% url 'cu_study'  record.program_id  'question' record.pk %}" 
+       <a href="{% url 'cu_question'  record.program_id  'question' record.pk %}" 
        class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></a>
    </div>
 '''
 
 TEMPLATE_ANSWER_ACTION = '''
    <div class="btn-group">
-       <a href="{% url 'cu_study' record.program_id record.question_id 'answer' record.pk %}"
+       <a href="{% url 'cu_answer' record.program_id record.question_id 'answer' record.pk %}"
        class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></a>
    </div>
    <div class="btn-group">
-       <a href="{% url 'cu_study' record.program_id record.question_id  'answer' record.pk 'delete' %}"
+       <a href="{% url 'del_answer' record.program_id record.question_id  'answer' record.pk 'delete' %}"
        class="btn btn-danger btn-sm" id="delete"><i class="fa fa-trash"></i></a>
    </div>
 '''
@@ -43,11 +43,14 @@ class QuestionTable(tables.Table):
         }
     )
 
-    answers = tables.LinkColumn(
-        "list_unit",
-        text="Ответы",
-        kwargs={'program_id': A("program_id"), 'question_id': A("pk"), 'factory': 'answer'},
-        verbose_name="",
+    num_answers = tables.LinkColumn(
+        "list_answer",
+        kwargs={
+            'program_id': A("program_id"),
+            'topic_id': A("topic_id"),
+            'question_id': A("pk"),
+            'factory': 'answer'},
+        verbose_name="Ответов",
     )
 
     module = tables.Column(
@@ -61,7 +64,7 @@ class QuestionTable(tables.Table):
     class Meta:
         attrs = {"class": "table table-bordered"}
         model = Question
-        sequence = ('row_number', 'program', 'module', 'topic', 'text', 'answers')
+        sequence = ('row_number', 'program', 'module', 'topic', 'text', 'num_answers')
         exclude = ('id',)
 
     def render_row_number(self):

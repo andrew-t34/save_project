@@ -1,9 +1,9 @@
-{% extends 'study/admin/program_detail_admin.html' %}
+{% extends 'study/admin/list_topic.html' %}
 
 {% load django_bootstrap_breadcrumbs %}
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Модуль" "program_detail" kwargs.program_id %}
+    {% breadcrumb "Создать тему" "program_detail" kwargs.program_id %}
 {% endblock %}
 
 
@@ -14,7 +14,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="{% url 'cu_study' kwargs.program_id kwargs.factory %}" method="post" role="form">
+        <form role="form" action="{% url 'create_program_unit' kwargs.program_id kwargs.factory %}" method="post" role="form">
 
             {% csrf_token %}
             {{ form.media }}

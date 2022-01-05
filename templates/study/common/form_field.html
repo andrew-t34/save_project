@@ -1,4 +1,9 @@
-{% extends 'adminlte/base.html' %}
+{% extends 'study/admin/list_field.html' %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+            {{ block.super }}
+            {% breadcrumb 'Создать область' "create_unit" 'level' %}
+ {% endblock %}
 
 
 {% block content %}
@@ -6,11 +11,10 @@
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title">Создать область обучения</h3>
-            <a href="{% url 'list_unit' kwargs.factory %}" class="btn btn-default btn-xs pull-right">Назад</a>
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="{% url 'cu_study' kwargs.factory %}" method="post" role="form">
+        <form role="form" action="{% url 'create_unit' kwargs.factory %}" method="post" role="form">
             {{ form.media.css }}
             {% csrf_token %}
             {{ form.id }}

@@ -1,5 +1,6 @@
 {% extends 'adminlte/base.html' %}
-
+{% load comments %}
+{% load comments_xtd %}
 {% load django_bootstrap_breadcrumbs %}
 {% load study_tags %}
 {% block breadcrumbs %}
@@ -9,17 +10,13 @@
     {% breadcrumb 'Программа' "program_detail" kwargs.program_id %}
 {% endblock %}
 {% block content %}
-    {% for topic in topic_obj %}
+    {% if topic %}
         <div class="row">
-
             <div class="col-md-12">
                 <div class="box box-solid">
                     <div class="box-header with-border">
                         <i class="fa fa-text-width"></i>
                         <h3 class="box-title">{{ topic.program.name|upper }}</h3>
-                        <a href="{% url 'cu_study' 'program' kwargs.program_id %}" class="text-green pull-right">
-                            <i class="fa fa-pencil"></i>
-                        </a>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -28,10 +25,15 @@
                                 <td>{{ topic.program.fullname }}</td>
                                 <td></td>
                             </tr>
-
-
+                            <tr>
+                                <td><strong>МОДУЛЬ: </strong></td>
+                                <td>{{ topic.module.name|upper }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ТЕМА:</strong> </td>
+                                <td>{{ topic.title|upper }}</td>
+                            </tr>
                         </table>
-
                     </div>
                 </div>
             </div>
@@ -48,190 +50,193 @@
                         <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Полезные ссылки</a></li>
                         <li class=""><a href="#tab_4" data-toggle="tab" aria-expanded="false">Вопросы</a></li>
                         <li class=""><a href="#tab_5" data-toggle="tab" aria-expanded="false">Комментарии</a></li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                                Действия <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li role="presentation">
-                                    <a href="{% url 'cu_study' kwargs.program_id 'module' %}" role="menuitem"
-                                       tabindex="-1">
-                                        Создать модуль
-                                    </a>
-                                </li>
-                                <li role="presentation">
-                                    <a role="menuitem" tabindex="-1"
-                                       href="{% url 'cu_study' kwargs.program_id 'topic' %}">
-                                        Создать тему
-                                    </a>
-                                </li>
-                                <li role="presentation">
-                                    <a role="menuitem" tabindex="-1"
-                                       href="{% url 'list_unit' kwargs.program_id 'question' %}">
-                                        Вопросы к теме
-                                    </a>
-                                </li>
-                                <li role="presentation" class="divider"></li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a>
-                                </li>
-                            </ul>
-                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <div class="box box-solid">
-
-                                <div class="box-header with-border">
-                                    <i class="fa fa-text-width"></i>
-                                    <h3 class="box-title"><strong>МОДУЛЬ: </strong>{{ topic.module.name|upper }} </h3>
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body">
-                                    <h4 class="box-title"><strong>ТЕМА:</strong> {{ topic.title|upper }}</h4>
-                                    <blockquote>
-                                        {{ topic.text|safe }}
-                                    </blockquote>
-                                </div>
-
-                                <!-- /.box-body -->
-                                <div class="box-footer">
-                                    <div class="row">
-                                        <div class="col-sm-4 border-right">
-                                            <div class="description-block">
-                                                {% if topic_obj.has_previous %}
-                                                    <a href="?page={{ topic_obj.previous_page_number }}"
-                                                       class="btn bg-light-blue-active color-palette btn-flat pull-left"><i
-                                                            class="fa fa-arrow-left"></i>Предыдущая</a>
-                                                {% endif %}
-                                            </div>
-                                            <!-- /.description-block -->
-                                        </div>
-                                        <!-- /.col -->
-                                        <div class="col-sm-4 border-right">
-                                            <div class="description-block">
-                                                <h5 class="description-header">Вы прочитали</h5>
-                                                <span class="description-text">
-                                            Тему {{ topic_obj.number }}  из  {{ topic_obj.paginator.num_pages }}.
-                                            </span>
-                                            </div>
-                                            <!-- /.description-block -->
-                                        </div>
-                                        <!-- /.col -->
-                                        <div class="col-sm-4">
-                                            <div class="description-block">
-                                                {% if topic_obj.has_next %}
-                                                    <a href="?page={{ topic_obj.next_page_number }}"
-                                                       class="btn bg-yellow color-palette btn-flat pull-right">Следующая
-                                                        <i
-                                                                class="fa fa-arrow-right"></i></a>
-                                                {% endif %}
-                                            </div>
-                                            <!-- /.description-block -->
-                                        </div>
-                                        <!-- /.col -->
-                                    </div>
-                                </div>
+{#                            <h3 class="box-title"><strong>МОДУЛЬ: </strong>{{ topic.module.name|upper }} </h3>#}
+{#                            <h4 class="box-title"><strong>ТЕМА:</strong> {{ topic.title|upper }}</h4>#}
+                            <blockquote>
+                                {{ topic.text|safe }}
+                            </blockquote>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                            <div class="alert alert-info alert-dismissible">
+                                <p class="text-center">
+                                    <strong>ИЗВИНИТЕ, ДЛЯ ДАННОЙ ТЕМЫ ЕЩЕ НЕ СОЗДАН ВИДЕО УРОК</strong>
+                                </p>
                             </div>
                         </div>
                         <!-- /.tab-pane -->
-
-                        <div class="tab-pane" id="tab_2">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                            It has survived not only five centuries, but also the leap into electronic typesetting,
-                            remaining essentially unchanged. It was popularised in the 1960s with the release of
-                            Letraset
-                            sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                            like Aldus PageMaker including versions of Lorem Ipsum.
-                        </div>
                         <div class="tab-pane" id="tab_3">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                            It has survived not only five centuries, but also the leap into electronic typesetting,
-                            remaining essentially unchanged. It was popularised in the 1960s with the release of
-                            Letraset
-                            sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                            like Aldus PageMaker including versions of Lorem Ipsum.
+                            <div class="alert alert-info alert-dismissible">
+                                <p class="text-center">
+                                    <strong>Мы скоро добавим ссылки на интересные статьи</strong>
+                                </p>
+                            </div>
                         </div>
-                        <!-- /.tab-pane -->
                         <!-- /.tab-pane -->
                         <div class="tab-pane" id="tab_4">
                             {% questions_get topic as questions %}
                             {% if questions %}
-                                <ol>
+                                <table class="table table-condensed table-hover">
+                                    <tbody>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Вопросы к теме</th>
+                                        <th style="width: 40px"></th>
+                                        <th style="width: 40px"></th>
+                                    </tr>
                                     {% for question in questions %}
-                                        <li>
-                                        {{ question.text }}
-                                        </li>
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ question.text }}</td>
+                                        </tr>
                                     {% endfor %}
-                                </ol>
+                                    </tbody>
+                                </table>
                             {% else %}
                                 <div class="alert alert-info alert-dismissible">
                                     <h4><i class="icon fa fa-ban "></i> Внимание!!!</h4>
                                     <p class="text-center"><strong>ДЛЯ ДАННОЙ ТЕМЫ ЕЩЕ НЕ РАЗРАБОТАНЫ ТЕСТОВЫЕ
                                         ВОПРОСЫ</strong></p>
                                 </div>
-                                <a href="{% url 'cu_study' kwargs.program_id 'question' %}"
-                                   class="btn btn-block btn-warning btn-flat">Создать</a>
                             {% endif %}
                         </div>
-                        <!-- /.tab-pane -->
                         <!-- /.tab-pane -->
                         <div class="tab-pane" id="tab_5">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                            It has survived not only five centuries, but also the leap into electronic typesetting,
-                            remaining essentially unchanged. It was popularised in the 1960s with the release of
-                            Letraset
-                            sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                            like Aldus PageMaker including versions of Lorem Ipsum.
-                        </div>
-                        <!-- /.tab-pane -->
-                    </div>
-                    <!-- /.tab-content -->
-                </div>
-                <!-- nav-tabs-custom -->
-            </div>
-            <!-- /.col -->
-        </div>
-    {% endfor %}
+                            {% render_comment_form for topic %}
+                            {% get_comment_count for topic as comment_count %}
+                            <p class="link-black text-sm">
+                                <i class="fa fa-comments-o margin-r-5"></i> Комментариев всего
+                                ({{ comment_count }})</p>
+                            <hr/>
 
-
-    <aside class="control-sidebar control-sidebar-dark control-sidebar">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            <li class="active"><a href="#control-sidebar-theme-demo-options-tab" data-toggle="tab" aria-expanded="true"><i
-                    class="fa fa-list"></i> ОГЛАВЛЕНИЕ</a></li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <ul style="list-style-type: none;">
-                {% for module in modules %}
-                    <li>
-                        <strong>{{ module.number }}.</strong>
-                        <strong>{{ module.name }}</strong>
-                        <a href="{% url 'cu_study' kwargs.program_id 'module' module.id %}" class="text-green">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                    </li>
-                    <ul style="list-style-type: none;">
-                        {% for topic in topics %}
-                            {% if topic.module_id == module.id %}
-                                <li>
-                                    {{ module.number }}.{{ topic.topic_number }}
-                                    <a href="{% url 'program_detail' kwargs.program_id %}?page={{ forloop.counter }}">
-                                        {{ topic.title }}
-                                    </a>
-                                </li>
+                            {% if comment_count %}
+                                <div class="comments">
+                                    {% render_xtdcomment_tree for topic %}
+                                </div>
                             {% endif %}
-                        {% endfor %}
-                    </ul>
-                {% endfor %}
-            </ul>
+                            <!-- /.post -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                    <!-- nav-tabs-custom -->
+                </div>
+                <!-- /.col -->
+            </div>
         </div>
-    </aside>
-
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-solid">
+                    <div class="box-body">
+                        <div class="col-sm-4 border-right">
+                            <div class="description-block">
+                                {% if previous_topic %}
+                                    <a href="{% url 'program_detail' kwargs.program_id previous_topic.id %}"
+                                       class="btn bg-light-blue-active color-palette btn-flat pull-left"><i
+                                            class="fa fa-arrow-left"></i>Предыдущая</a>
+                                {% endif %}
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-4 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">Вы прочитали</h5>
+                                <span class="description-text">Тема {{ topic_num }}  из  {{ topic_nums }}.</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-4">
+                            <div class="description-block">
+                                {% if next_topic %}
+                                    <a href="{% url 'program_detail' kwargs.program_id next_topic.id %}"
+                                       class="btn bg-yellow color-palette btn-flat pull-right">Следующая
+                                        <i
+                                                class="fa fa-arrow-right"></i></a>
+                                {% endif %}
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aside class="control-sidebar control-sidebar-dark control-sidebar">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li class="active"><a href="#control-sidebar-theme-demo-options-tab" data-toggle="tab" aria-expanded="true">
+                    <i class="fa fa-list"></i> ОГЛАВЛЕНИЕ</a>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <ul style="list-style-type: none;">
+                    {% for module in modules %}
+                        <li>
+                            <strong>{{ module.number }}.</strong>
+                            <strong>{{ module.name }}</strong>
+                        </li>
+                        <ul style="list-style-type: none;">
+                            {% for topic in topics %}
+                                {% if topic.module_id == module.id %}
+                                    <li>
+                                        {{ module.number }}.{{ topic.topic_number }}
+                                        <a href="{% url 'program_detail' kwargs.program_id topic.id %}">
+                                            {{ topic.title }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
+                </ul>
+            </div>
+        </aside>
+    {% elif not modules %}
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Quick Example</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <div class="box-body">
+                <div class="callout bg-gray color-palette">
+                    <p class="text-center">
+                        <strong>СОЗДАЙТЕ МОДУЛЬ ДЛЯ ДАННОЙ ПРОГРАММЫ</strong>
+                    </p>
+                </div>
+                <div class="box-footer">
+                    <a class="btn btn-flat btn-info pull-left" href="{% url 'cu_study' kwargs.program_id 'module' %}">
+                        Создать модуль
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Quick Example</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <div class="box-body">
+                <div class="callout bg-gray color-palette">
+                    <p class="text-center">
+                        <strong>СОЗДАЙТЕ ПЕРВУЮ ТЕМУ ДЛЯ ДАННОЙ ПРОГРАММЫ</strong>
+                    </p>
+                </div>
+                <div class="box-footer">
+                    <a class="btn btn-flat btn-info pull-left"
+                       href="{% url 'cu_study' kwargs.program_id 'topic' %}">
+                        Создать тему
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

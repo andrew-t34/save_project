@@ -40,19 +40,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'debug_toolbar',
     # General use templates & template tags (should appear first)
     'django_adminlte',
     # Optional: Django admin theme (must be before django.contrib.admin)
     'ckeditor',
     'ckeditor_uploader',
+    'django_comments',
+    'django_comments_xtd',
+
     # 'django_adminlte_theme',
     'django_tables2',
     'django_filters',
     'bootstrap_datepicker_plus',
     'django_bootstrap_breadcrumbs',
-    'django_ajax_tables',
     # 'django_ajax',
+    # ------------MY APP-------------#
     'company',
     'contract',
     'main',
@@ -60,6 +64,8 @@ INSTALLED_APPS = [
     'knowledge',
     'mptt',
     'accountprofile',
+    'custom_comment',
+
 ]
 
 MIDDLEWARE = [
@@ -194,8 +200,30 @@ BOOTSTRAP3 = {
     'include_jquery': True,
 }
 
+"""-----DJANGO_TABLES2-----"""
+
 DJANGO_TABLES2_TEMPLATE = "tables/mytable.html"
 
+"""-----DJANGO_COMMENTS_XTD-----"""
+
+COMMENTS_HIDE_REMOVED = True
+COMMENT_MAX_LENGTH = 300
+COMMENTS_APP = 'django_comments_xtd'
+COMMENTS_XTD_MAX_THREAD_LEVEL = 2
+COMMENTS_XTD_CONFIRM_EMAIL = False
+COMMENTS_XTD_MODEL = 'custom_comment.models.CustomComment'
+# COMMENTS_XTD_FORM_CLASS = 'custom_comment.forms.CustomCommentForm'
+COMMENTS_XTD_APP_MODEL_OPTIONS = {
+    'study.topic': {
+        'who_can_post': 'users',
+        'allow_flagging': True,
+        'allow_feedback': True,
+        'show_feedback': True,
+    }
+}
+MANAGERS = (
+    ('andrew', 'andrew-t34@mail.ru'),
+)
 
 """-----ckeditor-----"""
 CKEDITOR_UPLOAD_PATH = "uploads/"

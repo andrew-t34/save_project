@@ -1,4 +1,4 @@
-{% extends 'study/admin/program_detail_admin.html' %}
+{% extends 'study/admin/list_topic.html' %}
 
 {% load django_bootstrap_breadcrumbs %}
 {% block breadcrumbs %}
@@ -12,7 +12,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="{% url 'cu_study' kwargs.program_id kwargs.factory %}" method="post" novalidate>
+        <form role="form" action="{% url 'create_program_unit' kwargs.program_id kwargs.factory %}" method="post" novalidate>
             {% csrf_token %}
             {{ form.id }}
             {{ form.program_id }}

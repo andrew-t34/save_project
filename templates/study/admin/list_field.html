@@ -1,10 +1,18 @@
 {% extends 'adminlte/base.html' %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+            {{ block.super }}
+            {% breadcrumb 'Разделы' "studymain" %}
+            {% breadcrumb 'Области' "list_unit" 'field' %}
+ {% endblock %}
+
 
 
 {% block content %}
     <div class="row">
         <div class="pad margin no-print">
-            <a href="{% url 'cu_study' kwargs.factory %}" class="btn btn-block btn-warning btn-lg">Добавить область обучения</a>
+            <a href="{% url 'create_unit' kwargs.factory %}" class="btn btn-block btn-warning btn-lg">Добавить область
+                обучения</a>
         </div>
     </div>
     <div class="row">
@@ -22,11 +30,17 @@
                                 <td style="width: 10px">{{ forloop.counter }}.</td>
                                 <td>{{ unit.level }}</td>
                                 <td>{{ unit.name }}</td>
-                                <td style="width: 40px"><a href="{% url 'cu_study' kwargs.factory unit.id %}"
-                                                           class="badge bg-green"><i class="fa fa-pencil"></i></a></td>
-                                <td style="width: 40px"><a href="{% url 'cu_study' kwargs.factory unit.id 'del' %}"
-                                                           class="badge bg-red" id="delete"><i
-                                        class="fa fa-trash"></i></a></td>
+                                <td style="width: 40px">
+                                    <a href="{% url 'update_unit' kwargs.factory unit.id %}"
+                                       class="badge bg-green"><i class="fa fa-pencil"></i>
+                                    </a>
+                                </td>
+                                <td style="width: 40px">
+                                    <a href="{% url 'delete_unit' kwargs.factory unit.id 'delete' %}"
+                                       class="badge bg-red" id="delete">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>

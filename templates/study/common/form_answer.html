@@ -1,9 +1,9 @@
-{% extends 'study/admin/list_question.html' %}
+{% extends 'study/admin/list_answer.html' %}
 
 {% load django_bootstrap_breadcrumbs %}
 {% block breadcrumbs %}
             {{ block.super }}
-            {% breadcrumb "Создать вопрос" "list_unit" kwargs.program_id 'question' %}
+            {% breadcrumb "Создать ответы" "list_unit" kwargs.program_id 'question' %}
  {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="{% url 'cu_study' kwargs.program_id kwargs.question_id kwargs.factory %}" method="post" novalidate>
+        <form role="form" action="{% url 'cu_answer' kwargs.program_id kwargs.question_id kwargs.factory %}" method="post" novalidate>
             {% csrf_token %}
             {{ form.id }}
             {{ form.program_id }}

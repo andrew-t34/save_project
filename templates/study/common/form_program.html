@@ -1,6 +1,11 @@
 {% extends 'adminlte/base.html' %}
-
-
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb 'Разделы' "studymain" %}
+    {% breadcrumb 'Список програм' "list_unit" factory='program' %}
+    {% breadcrumb 'Создать' "cu_study" factory='program' %}
+{% endblock %}
 {% block content %}
     {{ form.media.css }}
     <div class="row">
@@ -12,7 +17,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form role="form" action="{% url 'cu_study' kwargs.factory %}" method="post" role="form" novalidate>
+                <form role="form" action="{% url 'create_unit' kwargs.factory %}" method="post" role="form" novalidate>
                     {{ form.media.css }}
                     {% csrf_token %}
                     {{ form.id }}

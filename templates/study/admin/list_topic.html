@@ -1,0 +1,64 @@
+{% extends 'study/admin/list_program.html' %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb 'Оглавление' "list_unit" kwargs.program_id 'topic' %}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="pad margin no-print">
+            <a href="{% url 'create_program_unit' kwargs.program_id 'module' %}" class="btn btn-block btn-warning btn-lg">Добавить модуль</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        <i class="fa fa-list"></i> ОГЛАВЛЕНИЕ</a>
+                    </h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <ul style="list-style-type: none;">
+                        {% for module in units.1 %}
+                            <li>
+                                <strong>{{ module.number }}.</strong>
+                                <strong>{{ module.name }}</strong>
+                                <a href="{% url 'update_program_unit' kwargs.program_id 'module' module.id %}" class="text-green">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </li>
+                            <ul style="list-style-type: none;">
+                                {% for topic in units.0 %}
+                                    {% if topic.module_id == module.id %}
+                                        <li>
+                                            {{ module.number }}.{{ topic.topic_number }}
+                                            <a href="{% url 'update_program_unit' kwargs.program_id 'topic' topic.id %}">
+                                                {{ topic.title }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                <li>
+                                    <a href="{% url 'create_topic_unit' kwargs.program_id module.id 'topic' %}" class="text-orange">
+                                        Добавить тему для модуля
+                                    </a>
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock %}

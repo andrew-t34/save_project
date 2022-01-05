@@ -1,0 +1,24 @@
+{% if allow_feedback %}
+    {% if show_feedback and item.likedit_users %}
+        <a class="" data-toggle="tooltip"
+           title="{{ item.likedit_users|join:'<br/>' }}">
+            + {{ item.likedit_users|length }}</a>
+    {% endif %}
+
+    <a href="{% url 'comments-xtd-like' item.comment.pk %}"
+       class=" {% if not item.likedit %}btn btn-xs btn-primary{% endif %}">
+        <i class="fa fa-thumbs-o-up"></i> Like</a>
+    <span class="text-muted">|</span>
+
+    <a href="{% url 'comments-xtd-dislike' item.comment.pk %}"
+       class="{% if not item.dislikedit %}mutedlink{% endif %}">
+        <i class="fa fa-thumbs-o-down"></i></a>
+
+    {% if show_feedback and item.dislikedit_users %}
+        <a class="text-red" data-toggle="tooltip"
+           title="{{ item.dislikedit_users|join:'<br/>' }}">
+            - {{ item.dislikedit_users|length }}</a>
+    {% endif %}
+{% endif %}
+
+{#<button type="button" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button>#}
