@@ -2,7 +2,6 @@ from .forms import *
 from .models import *
 from .tables import *
 from django_tables2 import RequestConfig
-from .filters import QuestionFilter
 from django.db.models import Q
 from django.db.models import Count
 
@@ -424,7 +423,8 @@ class QuestionFactoryForm:
         elif 'pk' in self.factory_model.obj_group.data_url:
             form = QuestionForm(self.factory_model.get_data_form())
         else:
-            if 'module_id' in self.factory_model.obj_group.data_url and 'topic_id' in self.factory_model.obj_group.data_url:
+            if 'module_id' in self.factory_model.obj_group.data_url and \
+                    'topic_id' in self.factory_model.obj_group.data_url:
                 form = QuestionForm(initial={
                     'program_id': self.factory_model.obj_group.data_url['program_id'],
                     'module_id': self.factory_model.obj_group.data_url['module_id'],
@@ -444,7 +444,8 @@ class QuestionFactoryModel:
 
     def get_data_form(self):
         if 'pk' in self.obj_group.data_url:
-            obj = self.obj_group.question_data.filter(id=self.obj_group.data_url['pk']).select_related('topic__module').values(
+            obj = self.obj_group.question_data.filter(
+                id=self.obj_group.data_url['pk']).select_related('topic__module').values(
                 'id', 'program_id', 'topic_id', 'topic__module_id', 'text'
             )
             obj = obj[0]
@@ -482,7 +483,10 @@ class QuestionList(BaseList):
         return table_list
 
     def get_filter(self):
-        if 'module_id' in self.obj_group.request.GET and self.obj_group.request.GET['module_id'] != '' and 'topic_id' in self.obj_group.request.GET and self.obj_model.obj_group.request.GET['topic_id'] != '':
+        if 'module_id' in self.obj_group.request.GET and \
+                self.obj_group.request.GET['module_id'] != '' and \
+                'topic_id' in self.obj_group.request.GET and \
+                self.obj_model.obj_group.request.GET['topic_id'] != '':
             data = self.obj_group.question_data.select_related('topic__module', 'program').filter(
                 Q(topic__module_id=self.obj_group.request.GET['module_id']),
                 Q(topic_id=self.obj_group.request.GET['topic_id']),

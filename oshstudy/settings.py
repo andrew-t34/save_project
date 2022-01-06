@@ -65,7 +65,10 @@ INSTALLED_APPS = [
     'mptt',
     'accountprofile',
     'custom_comment',
-
+    'quiz',
+    'multichoice',
+    'true_false',
+    'essay',
 ]
 
 MIDDLEWARE = [

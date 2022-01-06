@@ -19,19 +19,20 @@ from django.conf import settings
 from django.conf.urls.static import static
 import debug_toolbar
 
-urlpatterns = [   path('admin/', admin.site.urls),
-                  path('__debug__/', include(debug_toolbar.urls)),
-                  path('', include('main.urls')),
-                  path('accountprofile/', include('accountprofile.urls')),
-                  path('company/', include('company.urls')),
-                  path('contract/', include('contract.urls')),
-                  path('knowledge/', include('knowledge.urls')),
-                  path('accounts/', include('django.contrib.auth.urls')),
-                  path('study/', include('study.urls')),
-                  path('ckeditor/', include('ckeditor_uploader.urls')),
-                  path('comments/', include('django_comments_xtd.urls')),
-              ]
-
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('__debug__/', include(debug_toolbar.urls)),
+    path('', include('main.urls')),
+    path('accountprofile/', include('accountprofile.urls')),
+    path('company/', include('company.urls')),
+    path('contract/', include('contract.urls')),
+    path('knowledge/', include('knowledge.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('study/', include('study.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('comments/', include('django_comments_xtd.urls')),
+    path('quiz/', include('quiz.urls')),
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,25 @@
+{% extends 'adminlte/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "All Quizzes" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+{% for cat in category_list %}
+    <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3>3</h3>
+              <p>{{ cat.category }}</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-list-ul"></i>
+            </div>
+            <a href="{% url 'quiz_category_list_matching' category_name=cat.category %}" class="small-box-footer">
+              Подробнее <i class="fa fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        </div>
+  {% endfor %}
+</div>
+{% endblock %}

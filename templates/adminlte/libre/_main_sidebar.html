@@ -16,7 +16,6 @@
         {% endblock %}
 
         {% block form %}{% endblock %}
-
         <!-- sidebar menu: : style can be found in sidebar.less -->
         {% block nav_links_ul %}
             <ul class="sidebar-menu">
@@ -93,22 +92,73 @@
                                 <ul class="treeview-menu">
                                     <li>
                                         <a href="{% url 'studymain' %}">
-                                            <i class="fa fa-book"></i> Мои программы
+                                            <i class="fa fa-book"></i> Управление программами
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'quiz_category_list_all' %}">
+                                            <i class="fa fa-question"></i> Проверка знаний
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#">
-                                            <i class="fa fa-question"></i> Пробдное тестирование
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-graduation-cap"></i> Экзамен
+                                            <i class="fa fa-graduation-cap"></i> Обучение
                                         </a>
                                     </li>
                                 </ul>
                             </li>
+                            <li class="treeview" style="height: auto;">
+                                <a href="">
+                                    <i class="fa fa-share"></i>
+                                    <span>Управление тестами</span>
+                                    <span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu" style="display: none;">
+                                    <li><a href="{% url 'quiz_index' %}">
+                                        <i class="fa fa-circle-o"></i> Управление тестами</a></li>
+                                    <li>
+                                        <a href="{% url 'quiz_category_list_all' %}">
+                                            <i class="fa fa-circle-o"></i> Категории
+                                        </a>
+                                    </li>
+                                    <li class="treeview" style="height: auto;">
+                                        <a href="#"><i class="fa fa-circle-o"></i> Результат
+                                            <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                        </a>
+                                        <ul class="treeview-menu" style="display: none;">
+                                            <li>
+                                                <a href="{% url 'quiz_marking' %}">
+                                                    <i class="fa fa-circle-o"></i> Оценки
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'quiz_progress' %}">
+                                                    <i class="fa fa-circle-o"></i> Прогресс
+                                                </a>
+                                            </li>
+                                            <li class="treeview" style="height: auto;">
+                                                <a href="#">
+                                                    <i class="fa fa-circle-o"></i> Прогресс
+                                                    <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right">
 
+                                                </i>
+                                                </span>
+                                                </a>
+                                                <ul class="treeview-menu" style="display: none;">
+                                                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                                                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </li>
                         {% endif %}
                     {% endblock nav_links %}
                 {% endblock nav_links_outer %}
